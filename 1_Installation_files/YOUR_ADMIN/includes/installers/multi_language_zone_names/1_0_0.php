@@ -19,9 +19,9 @@ $db->Execute("CREATE TABLE IF NOT EXISTS " . TABLE_ZONES_NAME . " (
   zone_id int(11) NOT NULL,
   language_id int(11) NOT NULL DEFAULT '1',
   zone_name varchar(64) NOT NULL,
-  UNIQUE zones (zone_id, zone_country_id, language_id, zone_code, zone_name, zone_iso_code),
-  KEY idx_zones_name_zen (zones_name)
-) ENGINE=MyISAM DEFAULT CHARSET=' . DB_CHARSET . ';");
+  UNIQUE zones (zone_id, language_id, zone_name),
+  KEY idx_zone_name_zen (zone_name)
+) ENGINE=MyISAM DEFAULT CHARSET=" . DB_CHARSET . ";");
 
 $selectZoneNamesQuery = "SELECT zone_id, zone_name
                          FROM " . TABLE_ZONES . "
@@ -34,9 +34,9 @@ for ($i = 0, $n = sizeof($languages); $i < $n; $i++) {
   $language_id = $languages[$i]['id'];
   foreach($selectZoneNames as $selectZoneName) {
     $zoneNameArray = array(
-      'zones_id' => $selectZoneName['zones_id'],
+      'zone_id' => $selectZoneName['zone_id'],
       'language_id' => $language_id,
-      'zones_name' => $selectZoneName['zones_name']);
+      'zone_name' => $selectZoneName['zone_name']);
     zen_db_perform(TABLE_ZONES_NAME, $zoneNameArray);
   }
 }
