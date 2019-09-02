@@ -1,10 +1,10 @@
 SET @configuration_group_id=0;
 SELECT @configuration_group_id:=configuration_group_id
 FROM configuration
-WHERE configuration_key= 'MULTI_LANGUAGE_COUNTRY_NAMES_VERSION'
+WHERE configuration_key= 'MULTI_LANGUAGE_ZONE_NAMES_VERSION'
 LIMIT 1;
 DELETE FROM configuration WHERE configuration_group_id = @configuration_group_id AND configuration_group_id <> 0;
 DELETE FROM configuration_group WHERE configuration_group_id = @configuration_group_id AND configuration_group_id <> 0;
-DELETE FROM admin_pages WHERE page_key = 'configMultiLanguageCountryNames';
+DELETE FROM admin_pages WHERE page_key = 'configMultiLanguageZoneNames';
 
 DROP TABLE countries_name;
