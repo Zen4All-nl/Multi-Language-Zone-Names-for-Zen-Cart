@@ -281,51 +281,52 @@ class order extends base {
     $this->content_type = $_SESSION['cart']->get_content_type();
 
     /* BOF Zen4All Multi Language Zone Names 1 of 3 */
-    $customer_address_query = "select c.customers_firstname, c.customers_lastname, c.customers_telephone,
-                                    c.customers_email_address, ab.entry_company, ab.entry_street_address,
-                                    ab.entry_suburb, ab.entry_postcode, ab.entry_city, ab.entry_zone_id,
-                                    zn.zone_name, co.countries_id, co.countries_name,
-                                    co.countries_iso_code_2, co.countries_iso_code_3,
-                                    co.address_format_id, ab.entry_state
-                                   from (" . TABLE_CUSTOMERS . " c, " . TABLE_ADDRESS_BOOK . " ab )
-                                   left join " . TABLE_ZONES_NAME . " zn on zn_zone_id = ab.entry_zone_id
-                                     and zn.language_id = " . (int)$_SESSION['languages_id'] . "
-                                   left join " . TABLE_COUNTRIES . " co on (ab.entry_country_id = co.countries_id)
-                                   where c.customers_id = " . (!empty($_SESSION['customer_id']) ? (int)$_SESSION['customer_id'] : 0) . "
-                                   and ab.customers_id = " . (!empty($_SESSION['customer_id']) ? (int)$_SESSION['customer_id'] : 0) . "
-                                   and c.customers_default_address_id = ab.address_book_id";
+    $customer_address_query = "SELECT c.customers_firstname, c.customers_lastname, c.customers_telephone,
+                                      c.customers_email_address, ab.entry_company, ab.entry_street_address,
+                                      ab.entry_suburb, ab.entry_postcode, ab.entry_city, ab.entry_zone_id,
+                                      zn.zone_name, co.countries_id, co.countries_name,
+                                      co.countries_iso_code_2, co.countries_iso_code_3,
+                                      co.address_format_id, ab.entry_state
+                               FROM (" . TABLE_CUSTOMERS . " c,
+                                     " . TABLE_ADDRESS_BOOK . " ab)
+                               LEFT JOIN " . TABLE_ZONES_NAME . " zn ON zn_zone_id = ab.entry_zone_id
+                                 AND zn.language_id = " . (int)$_SESSION['languages_id'] . "
+                               LEFT JOIN " . TABLE_COUNTRIES . " co ON (ab.entry_country_id = co.countries_id)
+                               WHERE c.customers_id = " . (!empty($_SESSION['customer_id']) ? (int)$_SESSION['customer_id'] : 0) . "
+                               AND ab.customers_id = " . (!empty($_SESSION['customer_id']) ? (int)$_SESSION['customer_id'] : 0) . "
+                               AND c.customers_default_address_id = ab.address_book_id";
     /* EOF Zen4All Multi Language Zone Names 1 of 3 */
 
     $customer_address = $db->Execute($customer_address_query);
 
     /* BOF Zen4All Multi Language Zone Names 2 of 3 */
-    $shipping_address_query = "select ab.entry_firstname, ab.entry_lastname, ab.entry_company,
-                                    ab.entry_street_address, ab.entry_suburb, ab.entry_postcode,
-                                    ab.entry_city, ab.entry_zone_id, zn.zone_name, ab.entry_country_id,
-                                    c.countries_id, c.countries_name, c.countries_iso_code_2,
-                                    c.countries_iso_code_3, c.address_format_id, ab.entry_state
-                                   from " . TABLE_ADDRESS_BOOK . " ab
-                                   left join " . TABLE_ZONES_NAME . " zn on zn_zone_id = ab.entry_zone_id
-                                     and zn.language_id = " . (int)$_SESSION['languages_id'] . "
-                                   left join " . TABLE_COUNTRIES . " c on (ab.entry_country_id = c.countries_id)
-                                   where ab.customers_id = " . (!empty($_SESSION['customer_id']) ? (int)$_SESSION['customer_id'] : 0) . "
-                                   and ab.address_book_id = " . (!empty($_SESSION['sendto']) ? (int)$_SESSION['sendto'] : 0);
+    $shipping_address_query = "SELECT ab.entry_firstname, ab.entry_lastname, ab.entry_company,
+                                      ab.entry_street_address, ab.entry_suburb, ab.entry_postcode,
+                                      ab.entry_city, ab.entry_zone_id, zn.zone_name, ab.entry_country_id,
+                                      c.countries_id, c.countries_name, c.countries_iso_code_2,
+                                      c.countries_iso_code_3, c.address_format_id, ab.entry_state
+                               FROM " . TABLE_ADDRESS_BOOK . " ab
+                               LEFT JOIN " . TABLE_ZONES_NAME . " zn ON zn_zone_id = ab.entry_zone_id
+                                 AND zn.language_id = " . (int)$_SESSION['languages_id'] . "
+                               LEFT JOIN " . TABLE_COUNTRIES . " c ON (ab.entry_country_id = c.countries_id)
+                               WHERE ab.customers_id = " . (!empty($_SESSION['customer_id']) ? (int)$_SESSION['customer_id'] : 0) . "
+                               AND ab.address_book_id = " . (!empty($_SESSION['sendto']) ? (int)$_SESSION['sendto'] : 0);
     /* EOF Zen4All Multi Language Zone Names 2 of 3 */
 
     $shipping_address = $db->Execute($shipping_address_query);
 
     /* BOF Zen4All Multi Language Zone Names 3 of 3 */
-    $billing_address_query = "select ab.entry_firstname, ab.entry_lastname, ab.entry_company,
-                                   ab.entry_street_address, ab.entry_suburb, ab.entry_postcode,
-                                   ab.entry_city, ab.entry_zone_id, zn.zone_name, ab.entry_country_id,
-                                   c.countries_id, c.countries_name, c.countries_iso_code_2,
-                                   c.countries_iso_code_3, c.address_format_id, ab.entry_state
-                                  from " . TABLE_ADDRESS_BOOK . " ab
-                                  left join " . TABLE_ZONES_NAME . " zn on zn_zone_id = ab.entry_zone_id
-                                    and zn.language_id = " . (int)$_SESSION['languages_id'] . "
-                                  left join " . TABLE_COUNTRIES . " c on (ab.entry_country_id = c.countries_id)
-                                  where ab.customers_id = " . (!empty($_SESSION['customer_id']) ? (int)$_SESSION['customer_id'] : 0) . "
-                                  and ab.address_book_id = " . (!empty($_SESSION['billto']) ? (int)$_SESSION['billto'] : 0);
+    $billing_address_query = "SELECT ab.entry_firstname, ab.entry_lastname, ab.entry_company,
+                                     ab.entry_street_address, ab.entry_suburb, ab.entry_postcode,
+                                     ab.entry_city, ab.entry_zone_id, zn.zone_name, ab.entry_country_id,
+                                     c.countries_id, c.countries_name, c.countries_iso_code_2,
+                                     c.countries_iso_code_3, c.address_format_id, ab.entry_state
+                              FROM " . TABLE_ADDRESS_BOOK . " ab
+                              LEFT JOIN " . TABLE_ZONES_NAME . " zn ON zn_zone_id = ab.entry_zone_id
+                                AND zn.language_id = " . (int)$_SESSION['languages_id'] . "
+                              LEFT JOIN " . TABLE_COUNTRIES . " c ON (ab.entry_country_id = c.countries_id)
+                              WHERE ab.customers_id = " . (!empty($_SESSION['customer_id']) ? (int)$_SESSION['customer_id'] : 0) . "
+                              AND ab.address_book_id = " . (!empty($_SESSION['billto']) ? (int)$_SESSION['billto'] : 0);
     /* EOF Zen4All Multi Language Zone Names 3 of 3 */
 
     $billing_address = $db->Execute($billing_address_query);
